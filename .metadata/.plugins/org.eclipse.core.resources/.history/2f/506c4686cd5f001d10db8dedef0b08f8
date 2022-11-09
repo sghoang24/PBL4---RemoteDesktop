@@ -1,0 +1,14 @@
+package View;
+
+import javax.swing.JPanel;
+
+public class ServerPanel extends JPanel {
+
+	/**
+	 * Create the panel.
+	 */
+	public ServerPanel() {
+
+	}
+
+}
