@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTabbedPane;
+import java.awt.SystemColor;
 
 public class MainFrame extends JFrame {
 
@@ -19,6 +20,7 @@ public class MainFrame extends JFrame {
 			public void run() {
 				try {
 					MainFrame frame = new MainFrame();
+					frame.setResizable(false);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -32,24 +34,28 @@ public class MainFrame extends JFrame {
 	 */
 	public MainFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 521, 420);
+		setBounds(100, 100, 512, 399);
 		contentPane = new JPanel();
+		contentPane.setBackground(SystemColor.textHighlight);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(21, 10, 453, 337);
+		tabbedPane.setBounds(21, 10, 461, 337);
 		contentPane.add(tabbedPane);
 		
-		JPanel pn_Server = new JPanel();
-		tabbedPane.addTab("Server", null, pn_Server, null);
+//		JPanel pnl_Server = new JPanel();
+		ServerPanel server_Panel = new ServerPanel();
+		tabbedPane.addTab("Server", null, server_Panel, "Server Panel");
 		
-		JPanel pn_Client = new JPanel();
-		tabbedPane.addTab("Client", null, pn_Client, null);
+//		JPanel pnl_Client = new JPanel();
+		ClientPanel client_Panel = new ClientPanel();
+		tabbedPane.addTab("Client", null, client_Panel, "Client Panel");
 		
-		JPanel pn_Chat = new JPanel();
-		tabbedPane.addTab("Chat", null, pn_Chat, null);
+//		JPanel pnl_Chat = new JPanel();
+		ChatPanel chat_Panel = new ChatPanel();
+		tabbedPane.addTab("Chat", null, chat_Panel, "Chat Panel");
 	}
 }
