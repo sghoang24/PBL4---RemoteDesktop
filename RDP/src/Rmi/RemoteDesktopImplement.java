@@ -37,4 +37,48 @@ public class RemoteDesktopImplement extends UnicastRemoteObject implements Remot
 		return data;
 	}
 
+
+
+	@Override
+	public void mouseMovedServer(int x, int y) throws RemoteException {
+		this.mr_robot.mouseMove(x, y);	
+	}
+
+
+
+	@Override
+	public void mousePressedServer(int buttons) throws RemoteException {
+		this.mr_robot.mousePress(buttons);
+		
+	}
+
+
+
+	@Override
+	public void mouseReleasedServer(int buttons) throws RemoteException {
+		this.mr_robot.mouseRelease(buttons);
+	}
+
+
+
+	@Override
+	public void mouseWheelServer(int wheel_amt) throws RemoteException {
+		this.mr_robot.mouseWheel(wheel_amt);
+		
+	}
+
+
+
+	@Override
+	public void keyPressedServer(int keycode) throws RemoteException {
+		this.mr_robot.keyPress(keycode);
+	}
+
+
+
+	@Override
+	public void keyReleasedServer(int keycode) throws RemoteException {
+		this.mr_robot.keyRelease(keycode);
+	}
+
 }
