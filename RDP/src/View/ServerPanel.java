@@ -2,7 +2,15 @@ package View;
 
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
+
+import controller.common.CommonController;
+import gui.common.CommonLabel;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 
 import javax.swing.ImageIcon;
@@ -13,18 +21,35 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.border.EtchedBorder;
 import java.awt.SystemColor;
+import java.net.SocketException;
+import java.util.Vector;
 
-public class ServerPanel extends JPanel {
+import javax.swing.border.EtchedBorder;
+import java.awt.SystemColor;
+
+public class ServerPanel extends JPanel implements Runnable {
 	private JTextField tfPort;
 	private JTextField tfPassword;
-	private JLabel lbStartListen;
-	private JLabel lbStopListen;
+	private JLabel lbStatus;
+	private CommonLabel lbStartListen;
+	private CommonLabel lbStopListen;
 	private JComboBox<String> cbxIP;
+	private CommonController commonController;
+	
+	private Thread listen_thread;
 
 	/**
 	 * Create the panel.
 	 */
-	public ServerPanel() {
+	public ServerPanel(CommonController commonController) {
+		this.commonController = commonController;
+		this.initComponents();
+	}
+		
+	public void initComponents() {
+		lbStartListen = new CommonLabel();
+		lbStopListen = new CommonLabel();
+		lbStatus = new JLabel();
 		setBackground(SystemColor.textHighlight);
 		setLayout(null);
 		
@@ -55,6 +80,25 @@ public class ServerPanel extends JPanel {
 		cbxIP = new JComboBox();
 		cbxIP.setFont(new Font("Times New Roman", Font.PLAIN, 12));
 		cbxIP.setBounds(149, 30, 155, 27);
+		cbxIP.addPopupMenuListener(new PopupMenuListener() {
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				try {
+					cbxIP.removeAllItems();
+					cbxIP.addItem("0.0.0.0");
+					Vector<String> ipv4_Addresses = commonController.getTcpServer().getAllIPv4AddressesOnLocal();
+					for (String ipv4 : ipv4_Addresses) 
+						cbxIP.addItem(ipv4);
+				} catch (SocketException ex) {}
+			}
+
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {}
+
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent e) {}
+			
+		});
 		panel.add(cbxIP);
 		
 		tfPort = new JTextField();
@@ -69,41 +113,96 @@ public class ServerPanel extends JPanel {
 		tfPassword.setBounds(149, 111, 155, 27);
 		panel.add(tfPassword);
 		
-		JLabel lbStatus = new JLabel("New label");
-		lbStatus.setForeground(new Color(255, 0, 51));
-		lbStatus.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 12));
+		lbStatus.setText("Status: Stopped");
+		lbStatus.setForeground(new Color(255, 140, 0));
+		lbStatus.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 14));
 		lbStatus.setBounds(31, 149, 298, 33);
 		panel.add(lbStatus);
 		
-		lbStartListen = new JLabel("Start Listening");
+		lbStartListen.setText("Start Listening");
 		lbStartListen.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				lbStartListenMousePressed(e);
 			}
 		});
-		lbStartListen.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 13));
+		lbStartListen.setFont(new Font("Times New Roman", Font.ITALIC, 14));
 		lbStartListen.setBounds(71, 252, 122, 28);
 		lbStartListen.setIcon(new ImageIcon("D:\\DUT - Year 3\\PBL4\\PBL4---RemoteDesktop\\RDP\\Images\\listen_icon.png"));
 		add(lbStartListen);
 		
-		lbStopListen = new JLabel("Stop Listening");
-		lbStopListen.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 13));
+		lbStopListen.setText("Stop Listening");
+		lbStopListen.setFont(new Font("Times New Roman", Font.ITALIC, 14));
 		lbStopListen.setBounds(258, 252, 122, 28);
 		lbStopListen.setIcon(new ImageIcon("D:\\DUT - Year 3\\PBL4\\PBL4---RemoteDesktop\\RDP\\Images\\stop_icon.png"));
+		lbStopListen.setEnabled(false);
+		lbStopListen.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                lbStopListenMousePressed(e);
+            }
+        });
 		add(lbStopListen);
 
 	}
 	
+	// TODO: process listen event
 	private void lbStartListenMousePressed(MouseEvent e) {
 		if (e.getButton() == MouseEvent.BUTTON1 && lbStartListen.isEnabled()) {
 			try {
 				String host = cbxIP.getSelectedItem().toString().trim();
 				int port = Integer.parseInt(tfPort.getText().trim());
 				String password = tfPassword.getText().trim();
+				commonController.startListeningOnServer(host, port, password);
+				
+				// TODO: start listen_thread
+				listen_thread = new Thread(this);
+				listen_thread.setDaemon(true);
+				listen_thread.start();
+				
+				// TODO: set status
+				lbStatus.setText("Status: Listening...");
+				this.setEnabled(false);
+				lbStartListen.setEnabled(false);
+				lbStartListen.resetFont();
+				lbStopListen.setEnabled(true);
 			} catch (Exception ex) {
-				ex.printStackTrace();
+				JOptionPane.showMessageDialog(this, "Can't start listening on server:\n" + ex.getMessage());
 			}
 		}
+	}
+	
+	// TODO: process stop event
+	private void lbStopListenMousePressed(MouseEvent e) {
+		if(e.getButton() == MouseEvent.BUTTON1 && lbStopListen.isEnabled()) {
+            try {
+                commonController.stopListeningOnServer();
+
+                // TODO: stop listen_thread
+                this.listen_thread.interrupt();
+
+                // TODO: set status
+                lbStatus.setText("Status: Stopped");
+                this.setEnabled(true);
+                lbStopListen.resetFont();
+                lbStopListen.setEnabled(false);
+                lbStartListen.setEnabled(true);
+            }
+            catch(Exception exception) {
+                System.out.println(exception.getMessage());
+                JOptionPane.showMessageDialog(this, "Can't stop listening on server:\n" + exception.getMessage());
+            }
+        }
+	}
+
+	@Override
+	public void run() {
+		while (commonController.getTcpServer().isListening())
+			try {
+				commonController.getTcpServer().waitingForConnectionFromClient();
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		
 	}
 }
