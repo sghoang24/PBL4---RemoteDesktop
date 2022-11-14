@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.ImageIcon;
+import java.awt.SystemColor;
 
 public class ClientPanel extends JPanel {
 	private JTextField txtRemoteIP;
@@ -20,34 +21,36 @@ public class ClientPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public ClientPanel() {
+		setBackground(SystemColor.textHighlight);
 		setLayout(null);
 		
 		JPanel panel = new JPanel();
+		panel.setBackground(SystemColor.textHighlight);
 		panel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, 
 				new Color(255, 255, 255), new Color(160, 160, 160)), "Connect to Server", 
 				TitledBorder.LEADING, TitledBorder.TOP, new Font("Times New Roman", Font.BOLD, 14), Color.BLACK));
-		panel.setBounds(63, 34, 330, 206);
+		panel.setBounds(40, 41, 367, 204);
 		add(panel);
 		panel.setLayout(null);
 		
 		JLabel lblRemoteIP = new JLabel("Remote IP: ");
-		lblRemoteIP.setFont(new Font("Times New Roman", Font.BOLD, 12));
+		lblRemoteIP.setFont(new Font("Times New Roman", Font.BOLD, 13));
 		lblRemoteIP.setBounds(22, 27, 94, 28);
 		panel.add(lblRemoteIP);
 		
 		JLabel lblRemotePort = new JLabel("Remote Port: ");
-		lblRemotePort.setFont(new Font("Times New Roman", Font.BOLD, 12));
+		lblRemotePort.setFont(new Font("Times New Roman", Font.BOLD, 13));
 		lblRemotePort.setBounds(22, 69, 92, 28);
 		panel.add(lblRemotePort);
 		
 		JLabel lblPassword = new JLabel("Password: ");
-		lblPassword.setFont(new Font("Times New Roman", Font.BOLD, 12));
+		lblPassword.setFont(new Font("Times New Roman", Font.BOLD, 13));
 		lblPassword.setBounds(22, 107, 94, 28);
 		panel.add(lblPassword);
 		
 		txtRemoteIP = new JTextField();
 		txtRemoteIP.setFont(new Font("Times New Roman", Font.PLAIN, 12));
-		txtRemoteIP.setBounds(126, 28, 155, 27);
+		txtRemoteIP.setBounds(139, 28, 155, 27);
 		panel.add(txtRemoteIP);
 		txtRemoteIP.setColumns(10);
 		
@@ -55,19 +58,25 @@ public class ClientPanel extends JPanel {
 		txtRemotePort.setText("9999");
 		txtRemotePort.setFont(new Font("Times New Roman", Font.PLAIN, 12));
 		txtRemotePort.setColumns(10);
-		txtRemotePort.setBounds(126, 70, 155, 27);
+		txtRemotePort.setBounds(139, 70, 155, 27);
 		panel.add(txtRemotePort);
 		
 		txtpassword = new JPasswordField();
 		txtpassword.setEchoChar('*');
 		txtpassword.setToolTipText("");
-		txtpassword.setBounds(126, 108, 155, 28);
+		txtpassword.setBounds(139, 107, 155, 28);
 		panel.add(txtpassword);
 		
+		JLabel lblNewLabel = new JLabel("New label");
+		lblNewLabel.setForeground(new Color(255, 0, 51));
+		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 13));
+		lblNewLabel.setBounds(22, 146, 303, 36);
+		panel.add(lblNewLabel);
+		
 		JLabel lblConnectNow = new JLabel("Connect now");
-		lblConnectNow.setIcon(new ImageIcon("C:\\Users\\TECHCARE\\Documents\\GitHub\\PBL4---RemoteDesktop\\RDP\\Images\\connect_icon.png"));
-		lblConnectNow.setFont(new Font("Times New Roman", Font.PLAIN, 15));
-		lblConnectNow.setBounds(277, 255, 116, 36);
+		lblConnectNow.setIcon(new ImageIcon("D:\\DUT - Year 3\\PBL4\\PBL4---RemoteDesktop\\RDP\\Images\\connect_icon.png"));
+		lblConnectNow.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
+		lblConnectNow.setBounds(291, 253, 116, 36);
 		add(lblConnectNow);
 
 	}
