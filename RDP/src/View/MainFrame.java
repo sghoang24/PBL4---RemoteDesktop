@@ -5,12 +5,23 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import controller.common.CommonController;
+
 import javax.swing.JTabbedPane;
 import java.awt.SystemColor;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.rmi.NotBoundException;
 
 public class MainFrame extends JFrame {
 
 	private JPanel contentPane;
+	
+	private CommonController commonController;
+	private ServerPanel server_Panel;
+	private ClientPanel client_Panel;
+	private ChatPanel chat_Panel;
 
 	/**
 	 * Launch the application.
@@ -33,6 +44,14 @@ public class MainFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public MainFrame() {
+		this.initComponents();
+	}
+		
+	private void initComponents() {
+		commonController = new CommonController();
+		commonController.setChatPanel(chat_Panel);
+		
+		setTitle("Remote Desktop Application");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 512, 399);
 		contentPane = new JPanel();
@@ -46,16 +65,17 @@ public class MainFrame extends JFrame {
 		tabbedPane.setBounds(21, 10, 461, 337);
 		contentPane.add(tabbedPane);
 		
-//		JPanel pnl_Server = new JPanel();
-		ServerPanel server_Panel = new ServerPanel();
+		server_Panel = new ServerPanel(commonController);
 		tabbedPane.addTab("Server", null, server_Panel, "Server Panel");
 		
-//		JPanel pnl_Client = new JPanel();
-		ClientPanel client_Panel = new ClientPanel();
+		client_Panel = new ClientPanel();
 		tabbedPane.addTab("Client", null, client_Panel, "Client Panel");
 		
-//		JPanel pnl_Chat = new JPanel();
-		ChatPanel chat_Panel = new ChatPanel();
+		chat_Panel = new ChatPanel();
 		tabbedPane.addTab("Chat", null, chat_Panel, "Chat Panel");
 	}
+	
+	private void mainFrameWindowClosing(WindowEvent e) throws IOException, NotBoundException {
+        commonController.stopListeningOnServer();
+    }
 }
