@@ -19,6 +19,8 @@ import javax.swing.JTextField;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.border.EtchedBorder;
+import java.awt.SystemColor;
 import java.net.SocketException;
 import java.util.Vector;
 
