@@ -8,6 +8,7 @@ import java.rmi.NotBoundException;
 import Rmi.RmiClient;
 import Rmi.RmiServer;
 import View.ChatPanel;
+import View.MainChatPanel;
 import model.tcp.TcpClient;
 import model.tcp.TcpServer;
 
@@ -25,9 +26,9 @@ public class CommonController {
 		this.RMIClient = new RmiClient();
 	}
 	
-	public void setChatPanel(ChatPanel chat_panel) {
-        this.TCPServer = new TcpServer(chat_panel);
-        this.TCPClient = new TcpClient(chat_panel);
+	public void setChatPanel(MainChatPanel mainchat_panel) {
+        this.TCPServer = new TcpServer(mainchat_panel);
+        this.TCPClient = new TcpClient(mainchat_panel);
     }
 	
 	public TcpServer getTcpServer() {

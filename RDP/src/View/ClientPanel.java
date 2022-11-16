@@ -90,7 +90,7 @@ public class ClientPanel extends JPanel {
 		lbConnectNow.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				
+				connectLabelMousePressed(e);
 			}
 		});
 		add(lbConnectNow);

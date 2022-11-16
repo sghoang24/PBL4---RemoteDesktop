@@ -255,7 +255,6 @@ public class ChatPanel extends JPanel implements Runnable {
 
                 break;
             }
-        }
-		
+        }	
 	}
 }
