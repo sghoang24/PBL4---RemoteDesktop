@@ -1,6 +1,7 @@
 package controller.chat;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
@@ -18,5 +19,12 @@ public class ChatController {
 		bos.writeObject(Myfile);
 	}
 	
+	public FileInfo ReceiveFile() throws IOException, ClassNotFoundException {
+		FileInfo myfile = null;
+		ObjectInputStream dis = new ObjectInputStream(this.socket.getInputStream());
+		myfile = (FileInfo) dis.readObject();
+		return myfile;
+		
+	}
 	
 }
