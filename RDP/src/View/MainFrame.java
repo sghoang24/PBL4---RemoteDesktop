@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import controller.chat.ChatController;
 import controller.common.CommonController;
 
 import javax.swing.JTabbedPane;
@@ -71,7 +72,7 @@ public class MainFrame extends JFrame {
 		client_Panel = new ClientPanel();
 		tabbedPane.addTab("Client", null, client_Panel, "Client Panel");
 		
-		chat_Panel = new ChatPanel();
+		chat_Panel = new ChatPanel(commonController);
 		tabbedPane.addTab("Chat", null, chat_Panel, "Chat Panel");
 	}
 	
