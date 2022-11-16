@@ -1,0 +1,21 @@
+package controller;
+
+import Rmi.RmiClient;
+import Rmi.RmiServer;
+import model.tcp.TcpClient;
+import model.tcp.TcpServer;
+
+public class CommonController {
+	// TODO: for RMI/TCP Server
+	private TcpServer TCPServer;
+	private RmiServer RMIServer;
+	
+	// TODO: for RMI/TCP Client
+	private TcpClient TCPClient;
+	private RmiClient RMIClient;
+	
+	public CommonController() {
+		this.RMIServer = new RmiServer();
+		this.RMIClient = new RmiClient();
+	}
+}

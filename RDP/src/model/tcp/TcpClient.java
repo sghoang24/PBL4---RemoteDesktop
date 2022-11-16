@@ -7,16 +7,18 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import View.ChatPanel;
+import View.MainChatPanel;
+import controller.chat.ChatController;
 
 public class TcpClient {
-	private ChatPanel chat_panel;
+	private MainChatPanel mainchat_panel;
 	private Socket clientSocket;
 	private boolean is_connected_server;
 
-	public TcpClient(ChatPanel chat_panel) {
+	public TcpClient(MainChatPanel mainchat_panel) {
 		this.clientSocket = null;
 		this.is_connected_server = false;
-		this.chat_panel = chat_panel;
+		this.mainchat_panel = mainchat_panel;
 	}
 
 	public void startConnectingToServer(String host, int port, String password) throws Exception {
@@ -28,8 +30,8 @@ public class TcpClient {
 			dos.writeUTF(password);
 			String res = dis.readUTF();
 			if (res.equals("true")) {
-				// ChatController chatController = new ChatController(this.clientSocket);
-				// this.chat_panel.addNewConnection(chatController);
+				 ChatController chatController = new ChatController(this.clientSocket);
+				 this.mainchat_panel.addNewConnection(chatController);
 				this.is_connected_server = true;
 			} else if (res.equals("false")) {
 				this.clientSocket.close();
