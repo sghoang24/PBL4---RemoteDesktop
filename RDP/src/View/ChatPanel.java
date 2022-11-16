@@ -2,6 +2,9 @@ package View;
 
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
+
+import model.common.FileInfo;
+
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -18,6 +21,7 @@ import java.awt.event.MouseEvent;
 public class ChatPanel extends JPanel {
 	private JTextField txtMessage;
 	private String FilePath;
+	private FileInfo MyFile;
 
 	/**
 	 * Create the panel.
@@ -66,8 +70,9 @@ public class ChatPanel extends JPanel {
 		final JFileChooser fc = new JFileChooser();
 		fc.showOpenDialog(this);
 		if (fc.getSelectedFile() != null) {
-			FilePath = fc.getSelectedFile().getPath();
+			String FilePath = fc.getSelectedFile().getPath();
+			MyFile = new FileInfo(FilePath);
 		}
-		txtMessage.setText(FilePath);
+		txtMessage.setText(MyFile.getSourceDirectory());
 	}
 }
