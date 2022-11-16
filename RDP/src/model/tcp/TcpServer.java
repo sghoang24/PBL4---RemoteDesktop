@@ -13,9 +13,10 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import View.ChatPanel;
+import View.MainChatPanel;
 
 public class TcpServer {
-	private ChatPanel chat_panel;
+	private MainChatPanel mainchat_panel;
 	private ServerSocket serverSocket;
 	private Socket clientSocket;
 	private String password;
@@ -23,13 +24,13 @@ public class TcpServer {
 	private boolean is_listening;
 	private boolean is_has_user;
 	
-	public TcpServer(ChatPanel chat_panel) {
+	public TcpServer(MainChatPanel mainchat_panel) {
 		this.serverSocket = null;
 		this.clientSocket = null;
 		this.password = null;
 		this.is_listening = false;
 		this.is_has_user = false;
-		this.chat_panel = chat_panel;
+		this.mainchat_panel = mainchat_panel;
 	}
 	
 	public void startListeningOnTcpServer(String host, int port, String password) throws IOException {
