@@ -25,6 +25,7 @@ public class RmiServer {
                 System.setProperty("java.rmi.server.hostname", host);
                 LocateRegistry.createRegistry(port);
                 Naming.rebind(this.url, new RemoteDesktopImplement());
+                System.out.println("co dang ky");
             }
             catch(Exception e) {
                 // TODO: rebind when port already bound
@@ -36,6 +37,7 @@ public class RmiServer {
     public void stopBindingOnRmiServer() throws RemoteException, MalformedURLException, NotBoundException {
         if(this.is_binding == true) {
             Naming.unbind(this.url);
+            System.out.println("ngat ket noi");
             this.url = null;
             this.is_binding = false;
         }

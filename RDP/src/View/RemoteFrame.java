@@ -38,6 +38,8 @@ public class RemoteFrame extends JFrame implements Runnable {
 	private RemoteDesktopInterface IRemote;
 	private JPanel Screenpanel;
 	
+	private Thread ScreenThread;
+	
 	public RemoteFrame(ClientPanel clientpanel, CommonController comoncontroller, String quality) throws HeadlessException {
 		this.clientpanel = clientpanel;
 		this.comoncontroller = comoncontroller;
@@ -104,6 +106,8 @@ public class RemoteFrame extends JFrame implements Runnable {
 //        this.Screen_Thread.setDaemon(true);
 //        this.Screen_Thread.start();
 //        
+        this.ScreenThread = new Thread(this);
+        this.ScreenThread.start();
 	}
 
 
@@ -111,11 +115,12 @@ public class RemoteFrame extends JFrame implements Runnable {
 
 	@Override
 	public void run() {
+		System.out.println("co share man hinh");
 		Dimension Screensize = Toolkit.getDefaultToolkit().getScreenSize();
 		int W =(int) Screensize.getWidth();
 		int H =(int) Screensize.getHeight();
 		try {
-			while(this.comoncontroller.getTcpClient().isConnectedServer()) {
+			while(true) {
 				byte[] datascreen = this.IRemote.TakeScreen(Quality);
 				ByteArrayInputStream bis = new ByteArrayInputStream(datascreen);
 				BufferedImage image = ImageIO.read(bis);
