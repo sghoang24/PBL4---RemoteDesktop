@@ -8,10 +8,12 @@ import java.awt.Graphics;
 import java.awt.GridBagLayout;
 import java.awt.HeadlessException;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -44,11 +46,18 @@ public class RemoteFrame extends JFrame implements Runnable {
 	
 	private RemoteDesktopInterface IRemote;
 	private JPanel Screenpanel;
-	private JLabel lablescreen;
 	
 	private Thread ScreenThread;
+	private Dimension My_screen_size;
+	private Insets taskbar_insets;
+	private Insets frame_insets;	
+	//Screen
+	private float dx;
+	private float dy;
 	
-	public RemoteFrame(ClientPanel clientpanel, CommonController comoncontroller, String quality) throws HeadlessException, RemoteException {
+	
+//----------------------------------------------------
+	public RemoteFrame(ClientPanel clientpanel, CommonController comoncontroller, String quality) throws Exception {
 		this.clientpanel = clientpanel;
 		this.comoncontroller = comoncontroller;
 		Quality = quality;
@@ -61,59 +70,68 @@ public class RemoteFrame extends JFrame implements Runnable {
         this.setLayout(new BorderLayout());
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         
-        // add listener
+        // add listener key even
+        this.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent e) {
+				
+				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				try {
+					remoteFrameKeyReleased(e);
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				try {
+					remoteFrameKeyPressed(e);
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+        
+        
+        //display Frame
         this.setVisible(true);
-        
-        
+        this.My_screen_size = Toolkit.getDefaultToolkit().getScreenSize();
+        this.frame_insets = this.getInsets();
+        this.taskbar_insets = Toolkit.getDefaultToolkit().getScreenInsets(this.getGraphicsConfiguration());
         
         SetupScreenPanel();
         
-//        this.initComponents();
+       
         this.ScreenThread = new Thread(this);
         this.ScreenThread.start();
+        setupWindow();
 
 	}
-
+//----------------------------------------------------
 
 
 
 	@Override
-//	public void run() {
-//		System.out.println("co share man hinh");
-//		Dimension Screensize = Toolkit.getDefaultToolkit().getScreenSize();
-//		int W =(int) Screensize.getWidth();
-//		int H =(int) Screensize.getHeight();
-//		try {
-//			while(true) {
-//				byte[] datascreen = this.IRemote.TakeScreen(Quality);
-//				ByteArrayInputStream bis = new ByteArrayInputStream(datascreen);
-//				BufferedImage image = ImageIO.read(bis);
-//				
-//				Graphics graphis = Screenpanel.getGraphics();
-//				graphis.drawImage(image, 0, 0, W, H, Screenpanel);
-//			}
-//			
-//		} catch (Exception e) {
-//			System.out.println(e.toString());
-//		}
-//		
-//
-//	}
 	public void run(){
 		try{
 			// Read screenshots of the client and then draw them
-			System.out.println("in man hinh");
 			while(true){
 				byte[] bytes = this.IRemote.TakeScreen(Quality);
 				ByteArrayInputStream input = new ByteArrayInputStream(bytes);
                 BufferedImage image = ImageIO.read(input);
-                ImageIO.write(image, Quality, new File("C:\\Users\\HP\\eclipse-workspace\\RMITCPDemo\\src\\Screen\\nhan.PNG"));
-				System.out.println("da luu man hinh");
                 //Draw the received screenshots
 				Graphics graphics = Screenpanel.getGraphics();
 				graphics.drawImage(image, 0, 0, Screenpanel.getWidth(), Screenpanel.getHeight(), Screenpanel);
 			}
-
 		} catch(IOException ex) {
 			ex.printStackTrace();
 		} catch (Exception e) {
@@ -121,11 +139,15 @@ public class RemoteFrame extends JFrame implements Runnable {
 			e.printStackTrace();
 		}
 	}
+//----------------------------------------------------
+	
+	
+	
 	
 	private void SetupScreenPanel() {
+		//set up panel
 		this.Screenpanel = new JPanel();
 		this.Screenpanel.setBackground(Color.GREEN);
-		
 		
 		
 		//add mouse even
@@ -183,73 +205,43 @@ public class RemoteFrame extends JFrame implements Runnable {
         this.add(this.Screenpanel, BorderLayout.CENTER);
 	}
 	
-	private void initComponents() throws RemoteException {
-        // TODO: constructor
-        this.lablescreen = new JLabel();
-
-        // TODO: style lablescreen
-        this.lablescreen.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                try {
-                    screenLabelMousePressed(e);
-                }
-                catch(RemoteException remoteException) {
-                    dispose();
-                }
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                try {
-                    screenLabelMouseReleased(e);
-                }
-                catch(RemoteException remoteException) {
-                    dispose();
-                }
-            }
-        });
-        this.addMouseWheelListener((e) -> {
-            try {
-                screenLabelMouseWheelMoved(e);
-            }
-            catch(RemoteException remoteException) {
-                dispose();
-            }
-        });
-        this.lablescreen.addMouseMotionListener(new MouseMotionAdapter() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                try {
-                    screenLabelMouseMoved(e);
-                }
-                catch(RemoteException remoteException) {
-                    dispose();
-                }
-            }
-
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                try {
-                    screenLabelMouseDragged(e);
-                }
-                catch(RemoteException remoteException) {
-                    dispose();
-                }
-            }
-        });
-        this.add(this.lablescreen);
+	private void setupWindow() throws Exception {
+		
+		
+		//get screenhost server
+        ImageIO.setUseCache(false);
+        byte[] dgram = this.IRemote.TakeScreen(Quality);
+        ByteArrayInputStream bis = new ByteArrayInputStream(dgram);
+        BufferedImage screenshot = ImageIO.read(bis);
+        
+        
+        this.My_screen_size.height -= (this.taskbar_insets.top + this.taskbar_insets.bottom + this.frame_insets.top);
+        
+        
+        //scale man hinh
+        if(this.My_screen_size.width == screenshot.getWidth() && this.My_screen_size.height == screenshot.getHeight()) {
+        	//bang nhau hoac lơn hon server
+	          this.dx = 1;
+	          this.dy = 1;
+        }
+        else {
+        	//scale man hinh neu client nho hơn
+        	this.dx = (float) screenshot.getWidth() / this.My_screen_size.width;
+        	this.dy = (float) screenshot.getHeight() / this.My_screen_size.height;
+        	System.out.println(dx);
+        }
     }
+//----------------------------------------------------	
 	
-	private void remoteFrameWindowClosing(WindowEvent e) {
-        this.dispose();
-    }
-
-    private void remoteFrameWindowOpened(WindowEvent e) {
-        this.clientpanel.setEnabled(false);
-    }
-
-    // TODO: remote keyboard of server
+	
+	
+	
+	
+	
+	
+	
+	//listener even:
+	// TODO: remote keyboard of server
     private void remoteFrameKeyPressed(KeyEvent e) throws RemoteException {
         this.IRemote.keyPressedServer(e.getKeyCode());
     }
@@ -257,6 +249,10 @@ public class RemoteFrame extends JFrame implements Runnable {
     private void remoteFrameKeyReleased(KeyEvent e) throws RemoteException {
         this.IRemote.keyReleasedServer(e.getKeyCode());
     }
+    
+    
+    
+    // TODO: remote mouse of server
     private void screenLabelMousePressed(MouseEvent e) throws RemoteException {
         this.IRemote.mousePressedServer(InputEvent.getMaskForButton(e.getButton()));
     }
@@ -266,14 +262,14 @@ public class RemoteFrame extends JFrame implements Runnable {
     }
 
     private void screenLabelMouseMoved(MouseEvent e) throws RemoteException {
-        float x = e.getX() ;
-        float y = e.getY() ;
+        float x = e.getX() *dx;
+        float y = e.getY() *dy;
         this.IRemote.mouseMovedServer((int) x, (int) y);
     }
 
     private void screenLabelMouseDragged(MouseEvent e) throws RemoteException {
-        float x = e.getX() ;
-        float y = e.getY() ;
+        float x = e.getX() *dx;
+        float y = e.getY() *dy;
         this.IRemote.mouseMovedServer((int) x, (int) y);
     }
 
