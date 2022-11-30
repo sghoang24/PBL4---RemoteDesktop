@@ -67,10 +67,10 @@ public class MainFrame extends JFrame {
 		tabbedPane.setBounds(21, 10, 461, 337);
 		contentPane.add(tabbedPane);
 		
-		server_Panel = new ServerPanel(commonController);
+		this.server_Panel = new ServerPanel(this.commonController);
 		tabbedPane.addTab("Server", null, server_Panel, "Server Panel");
 		
-		client_Panel = new ClientPanel();
+		this.client_Panel = new ClientPanel(this.commonController);
 		tabbedPane.addTab("Client", null, client_Panel, "Client Panel");
 		
 		mainchat_Panel = new MainChatPanel(commonController);

@@ -38,6 +38,7 @@ public class ChatPanel extends JPanel implements Runnable {
 	private String FilePath;
 	private FileInfo MyFile;
 
+	private MainChatPanel parent;
 	private ChatController chatController;
 	private CommonController commonController;
 	private JScrollPane scrollPane;
@@ -51,13 +52,15 @@ public class ChatPanel extends JPanel implements Runnable {
 	/**
 	 * Create the panel.
 	 */
-	public ChatPanel(CommonController commonController, ChatController chatController) {
+	public ChatPanel(MainChatPanel parent, CommonController commonController, ChatController chatController) {
 		this.setBackground(SystemColor.textHighlight);
         this.setLayout(null);
+        System.out.println("Create Chat Panel");
 
         // TODO: class for handle events
         this.commonController = commonController;
         this.chatController = chatController;
+        this.parent = parent;
 
         // TODO: add components
         this.initComponents();
@@ -67,12 +70,12 @@ public class ChatPanel extends JPanel implements Runnable {
         this.recv_thread.setDaemon(true);
         this.recv_thread.start();
 	}
-		
+
 	private void initComponents() {
-		
+		this.setBounds(0, 0, 456, 320);
 		txtMessage = new JTextField();
 		txtMessage.setFont(new Font("Times New Roman", Font.PLAIN, 12));
-		txtMessage.setBounds(10, 244, 339, 54);
+		txtMessage.setBounds(8, 244, 339, 54);
 		add(txtMessage);
 		txtMessage.setColumns(10);
 		
@@ -98,10 +101,9 @@ public class ChatPanel extends JPanel implements Runnable {
         this.scrollPane.setViewportView(this.contentPanel);
         this.scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         this.scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        this.scrollPane.setBounds(10, 10, 439, 214);
+        this.scrollPane.setBounds(8, 10, 439, 214);
         add(scrollPane);
         
-		
 		
 		lblSend = new JLabel("Send");
 		lblSend.setIcon(new ImageIcon("D:\\DUT - Year 3\\PBL4\\PBL4---RemoteDesktop\\RDP\\Images\\send_icon.png"));
@@ -216,6 +218,14 @@ public class ChatPanel extends JPanel implements Runnable {
         }
         return message;
     }
+	
+//	@Override
+//    public void setVisible(boolean b) {
+//        // TODO: move scroll to bottom when show up
+//        this.scrollPane.getViewport().setViewPosition(new Point(0, this.scrollPane.getVerticalScrollBar().getMaximum()));
+//        this.scrollPane.getViewport().setViewPosition(new Point(0, this.scrollPane.getVerticalScrollBar().getMaximum()));
+//        super.setVisible(b);
+//    }
 
 	@Override
 	public void run() {
@@ -247,6 +257,10 @@ public class ChatPanel extends JPanel implements Runnable {
                 this.commonController.getTcpServer().setHasPartner(false);
                 this.commonController.getTcpClient().setConnectedServer(false);
 
+                this.parent.remove(this);
+                this.parent.validate();
+                this.parent.revalidate();
+                this.parent.repaint();
 
                 try {
                     this.chatController.getSocket().close();

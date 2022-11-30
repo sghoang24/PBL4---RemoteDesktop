@@ -102,12 +102,14 @@ public class ServerPanel extends JPanel implements Runnable {
 		panel.add(cbxIP);
 		
 		tfPort = new JTextField();
+		tfPort.setText("9999");
 		tfPort.setFont(new Font("Times New Roman", Font.PLAIN, 12));
 		tfPort.setBounds(149, 72, 155, 27);
 		panel.add(tfPort);
 		tfPort.setColumns(10);
 		
 		tfPassword = new JTextField();
+		tfPassword.setText("123456");
 		tfPassword.setFont(new Font("Times New Roman", Font.PLAIN, 12));
 		tfPassword.setColumns(10);
 		tfPassword.setBounds(149, 111, 155, 27);
@@ -126,14 +128,14 @@ public class ServerPanel extends JPanel implements Runnable {
 				lbStartListenMousePressed(e);
 			}
 		});
-		lbStartListen.setFont(new Font("Times New Roman", Font.ITALIC, 14));
-		lbStartListen.setBounds(71, 252, 122, 28);
+		lbStartListen.setFont(new Font("Times New Roman", Font.ITALIC, 15));
+		lbStartListen.setBounds(71, 254, 131, 28);
 		lbStartListen.setIcon(new ImageIcon("D:\\DUT - Year 3\\PBL4\\PBL4---RemoteDesktop\\RDP\\Images\\listen_icon.png"));
 		add(lbStartListen);
 		
 		lbStopListen.setText("Stop Listening");
-		lbStopListen.setFont(new Font("Times New Roman", Font.ITALIC, 14));
-		lbStopListen.setBounds(258, 252, 122, 28);
+		lbStopListen.setFont(new Font("Times New Roman", Font.ITALIC, 15));
+		lbStopListen.setBounds(258, 254, 131, 28);
 		lbStopListen.setIcon(new ImageIcon("D:\\DUT - Year 3\\PBL4\\PBL4---RemoteDesktop\\RDP\\Images\\stop_icon.png"));
 		lbStopListen.setEnabled(false);
 		lbStopListen.addMouseListener(new MouseAdapter() {

@@ -14,6 +14,7 @@ import java.util.Vector;
 
 import View.ChatPanel;
 import View.MainChatPanel;
+import controller.chat.ChatController;
 
 public class TcpServer {
 	private MainChatPanel mainchat_panel;
@@ -62,8 +63,8 @@ public class TcpServer {
 		if (this.password.equals(passwordFromClient)) {
 			res = "true";
 			this.is_has_user = true;
-			// ChatController chatController = new ChatController(this.clientSocket);
-			// this.chat_panel.addNewConnection(chatController);
+			ChatController chatController = new ChatController(this.clientSocket);
+			this.mainchat_panel.addNewConnection(chatController);
 		}
 		else res = "false";
 		dos.writeUTF(res);
