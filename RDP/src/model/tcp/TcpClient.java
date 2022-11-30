@@ -30,8 +30,9 @@ public class TcpClient {
 			dos.writeUTF(password);
 			String res = dis.readUTF();
 			if (res.equals("true")) {
-				 ChatController chatController = new ChatController(this.clientSocket);
-				 this.mainchat_panel.addNewConnection(chatController);
+				System.out.println("Login successfull");
+				ChatController chatController = new ChatController(this.clientSocket);
+				this.mainchat_panel.addNewConnection(chatController);
 				this.is_connected_server = true;
 			} else if (res.equals("false")) {
 				this.clientSocket.close();

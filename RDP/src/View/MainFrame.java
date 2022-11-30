@@ -50,8 +50,7 @@ public class MainFrame extends JFrame {
 	}
 		
 	private void initComponents() {
-		commonController = new CommonController();
-		commonController.setChatPanel(mainchat_Panel);
+		this.commonController = new CommonController();
 		
 		setTitle("Remote Desktop Application");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -67,14 +66,16 @@ public class MainFrame extends JFrame {
 		tabbedPane.setBounds(21, 10, 461, 337);
 		contentPane.add(tabbedPane);
 		
-		server_Panel = new ServerPanel(commonController);
+		this.server_Panel = new ServerPanel(this.commonController);
 		tabbedPane.addTab("Server", null, server_Panel, "Server Panel");
 		
-		client_Panel = new ClientPanel();
+		this.client_Panel = new ClientPanel(this.commonController);
 		tabbedPane.addTab("Client", null, client_Panel, "Client Panel");
 		
-		mainchat_Panel = new MainChatPanel(commonController);
+		this.mainchat_Panel = new MainChatPanel(this.commonController);
 		tabbedPane.addTab("Chat", null, mainchat_Panel, "Main Chat Panel");
+		
+		this.commonController.setChatPanel(mainchat_Panel);
 	}
 	
 	private void mainFrameWindowClosing(WindowEvent e) throws IOException, NotBoundException {

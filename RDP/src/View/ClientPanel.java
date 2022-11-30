@@ -6,6 +6,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.AncestorListener;
 
 import controller.common.CommonController;
+import gui.common.CommonLabel;
 
 import javax.swing.border.EtchedBorder;
 import java.awt.Color;
@@ -25,12 +26,14 @@ public class ClientPanel extends JPanel {
 	private JTextField txtRemoteIP;
 	private JTextField txtRemotePort;
 	private JPasswordField txtpassword;
-	private JLabel lbConnectNow;
+	private CommonLabel lbConnectNow;
 	private CommonController common_Controller;
 	/**
 	 * Create the panel.
 	 */
-	public ClientPanel() {
+	public ClientPanel(CommonController common_Controller) {
+		this.common_Controller = common_Controller;
+		lbConnectNow = new CommonLabel();
 		setBackground(SystemColor.textHighlight);
 		setLayout(null);
 		
@@ -77,13 +80,13 @@ public class ClientPanel extends JPanel {
 		txtpassword.setBounds(139, 107, 155, 28);
 		panel.add(txtpassword);
 		
-		JLabel lblNewLabel = new JLabel("New label");
+		JLabel lblNewLabel = new JLabel();
 		lblNewLabel.setForeground(new Color(255, 0, 51));
 		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 13));
 		lblNewLabel.setBounds(22, 146, 303, 36);
 		panel.add(lblNewLabel);
 		
-		lbConnectNow = new JLabel("Connect now");
+		lbConnectNow.setText("Connect now");
 		lbConnectNow.setIcon(new ImageIcon("D:\\DUT - Year 3\\PBL4\\PBL4---RemoteDesktop\\RDP\\Images\\connect_icon.png"));
 		lbConnectNow.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lbConnectNow.setBounds(291, 253, 116, 36);
