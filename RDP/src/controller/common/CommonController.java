@@ -27,6 +27,7 @@ public class CommonController {
 	}
 	
 	public void setChatPanel(MainChatPanel mainchat_panel) {
+		System.out.println("Set chat panel");
         this.TCPServer = new TcpServer(mainchat_panel);
         this.TCPClient = new TcpClient(mainchat_panel);
     }
@@ -64,15 +65,17 @@ public class CommonController {
     
     public void startConnectingToServer(String host, int port, String password) throws Exception {
     	// TODO: check server is listening?
-//    	if (this.TCPServer.isListening()) {
-//    		String IP_Server = this.TCPServer.getServer().getInetAddress().getHostAddress();
-//    		if (host.equals(IP_Server)) throw new Exception("Cannot remote yourself!");
-//    		System.out.println(IP_Server + " | " + host);
-//    	}
-//    	
-//    	if (this.TCPClient.isConnectedServer()) throw new Exception("You has already remoted!");
-    	// Not connected
-//    	this.TCPClient.startConnectingToServer(host, port, password);
+    	System.out.println("ngoai if");
+    	if (this.TCPServer.isListening()) {
+    		System.out.println("trong if");
+    		String IP_Server = this.TCPServer.getServer().getInetAddress().getHostAddress();
+    		if (host.equals(IP_Server)) throw new Exception("Cannot remote yourself!");
+    		System.out.println(IP_Server + " | " + host);
+    	}
+    	
+    	if (this.TCPClient.isConnectedServer()) throw new Exception("You has already remoted!");
+//    	 Not connected
+    	this.TCPClient.startConnectingToServer(host, port, password);
     	this.RMIClient.startConnectingToRmiServer(host, port + 1);
     	
     }

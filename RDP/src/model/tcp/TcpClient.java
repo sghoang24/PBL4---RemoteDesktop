@@ -23,6 +23,7 @@ public class TcpClient {
 
 	public void startConnectingToServer(String host, int port, String password) throws Exception {
 		if (this.is_connected_server == false) { // Haven't connected
+			System.out.println("oke1");
 			this.clientSocket = new Socket(host, port);
 			DataInputStream dis = new DataInputStream(this.clientSocket.getInputStream());
 			DataOutputStream dos = new DataOutputStream(this.clientSocket.getOutputStream());
