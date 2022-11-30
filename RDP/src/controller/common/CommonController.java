@@ -64,16 +64,17 @@ public class CommonController {
     
     public void startConnectingToServer(String host, int port, String password) throws Exception {
     	// TODO: check server is listening?
-    	if (this.TCPServer.isListening()) {
-    		String IP_Server = this.TCPServer.getServer().getInetAddress().getHostAddress();
-    		if (host.equals(IP_Server)) throw new Exception("Cannot remote yourself!");
-    		System.out.println(IP_Server + " | " + host);
-    	}
-    	
-    	if (this.TCPClient.isConnectedServer()) throw new Exception("You has already remoted!");
+//    	if (this.TCPServer.isListening()) {
+//    		String IP_Server = this.TCPServer.getServer().getInetAddress().getHostAddress();
+//    		if (host.equals(IP_Server)) throw new Exception("Cannot remote yourself!");
+//    		System.out.println(IP_Server + " | " + host);
+//    	}
+//    	
+//    	if (this.TCPClient.isConnectedServer()) throw new Exception("You has already remoted!");
     	// Not connected
-    	this.TCPClient.startConnectingToServer(host, port, password);
+//    	this.TCPClient.startConnectingToServer(host, port, password);
     	this.RMIClient.startConnectingToRmiServer(host, port + 1);
+    	
     }
 }
 

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="View.ServerPanel"/>
-    <fullyQualifiedTypeName name="controller.common.CommonController"/>
-    <fullyQualifiedTypeName name="controller.chat.ChatController"/>
-    <fullyQualifiedTypeName name="javax.swing.JLabel"/>
-    <fullyQualifiedTypeName name="java.awt.SystemColor"/>
-    <fullyQualifiedTypeName name="gui.common.CommonLabel"/>
-</qualifiedTypeNameHistroy>

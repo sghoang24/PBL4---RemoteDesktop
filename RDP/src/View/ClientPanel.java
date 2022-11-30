@@ -94,9 +94,16 @@ public class ClientPanel extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				connectLabelMousePressed(e);
+				try {
+					createscreenremote();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		add(lbConnectNow);
+		this.common_Controller = new CommonController();
 
 	}
 	private boolean isFormatIpv4(String host) {
@@ -113,7 +120,7 @@ public class ClientPanel extends JPanel {
         if(e.getButton() == MouseEvent.BUTTON1 && lbConnectNow.isEnabled()) {
             this.setEnabled(false);
             //this.loader_label.setVisible(true);
-
+            
             Thread connect_thread = new Thread(() -> {
                 try {
                     String host = txtRemoteIP.getText().trim();
@@ -151,4 +158,10 @@ public class ClientPanel extends JPanel {
             connect_thread.start();
         }
     }
+	private void createscreenremote() throws Exception {
+		String host = txtRemoteIP.getText().trim();
+		int port = Integer.parseInt(txtRemotePort.getText().trim());
+		this.common_Controller.startConnectingToServer(host, port, "abcd");
+		new RemoteFrame(this, this.common_Controller, "png");
+	}
 }
