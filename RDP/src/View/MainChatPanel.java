@@ -23,7 +23,7 @@ public class MainChatPanel extends JPanel {
 		this.setBackground(SystemColor.textHighlight);
 		this.setLayout(null);
 //		this.setVisible(true);
-		this.initComponent();
+//		this.initComponent();
 
 	}
 	
