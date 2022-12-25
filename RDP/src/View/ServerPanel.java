@@ -130,13 +130,13 @@ public class ServerPanel extends JPanel implements Runnable {
 		});
 		lbStartListen.setFont(new Font("Times New Roman", Font.ITALIC, 15));
 		lbStartListen.setBounds(71, 254, 131, 28);
-		lbStartListen.setIcon(new ImageIcon("D:\\DUT - Year 3\\PBL4\\PBL4---RemoteDesktop\\RDP\\Images\\listen_icon.png"));
+		lbStartListen.setIcon(new ImageIcon("Images\\listen_icon.png"));
 		add(lbStartListen);
 		
 		lbStopListen.setText("Stop Listening");
 		lbStopListen.setFont(new Font("Times New Roman", Font.ITALIC, 15));
 		lbStopListen.setBounds(258, 254, 131, 28);
-		lbStopListen.setIcon(new ImageIcon("D:\\DUT - Year 3\\PBL4\\PBL4---RemoteDesktop\\RDP\\Images\\stop_icon.png"));
+		lbStopListen.setIcon(new ImageIcon("Images\\stop_icon.png"));
 		lbStopListen.setEnabled(false);
 		lbStopListen.addMouseListener(new MouseAdapter() {
             @Override
@@ -178,6 +178,7 @@ public class ServerPanel extends JPanel implements Runnable {
 	private void lbStopListenMousePressed(MouseEvent e) {
 		if(e.getButton() == MouseEvent.BUTTON1 && lbStopListen.isEnabled()) {
             try {
+            	System.out.println("btn stop");
                 commonController.stopListeningOnServer();
 
                 // TODO: stop listen_thread

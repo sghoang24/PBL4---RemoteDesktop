@@ -87,7 +87,7 @@ public class ClientPanel extends JPanel {
 		panel.add(lblNewLabel);
 		
 		lbConnectNow.setText("Connect now");
-		lbConnectNow.setIcon(new ImageIcon("D:\\DUT - Year 3\\PBL4\\PBL4---RemoteDesktop\\RDP\\Images\\connect_icon.png"));
+		lbConnectNow.setIcon(new ImageIcon("Images\\connect_icon.png"));
 		lbConnectNow.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
 		lbConnectNow.setBounds(291, 253, 116, 36);
 		lbConnectNow.addMouseListener(new MouseAdapter() {

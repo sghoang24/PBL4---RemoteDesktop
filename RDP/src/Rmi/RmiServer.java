@@ -37,9 +37,9 @@ public class RmiServer {
     public void stopBindingOnRmiServer() throws RemoteException, MalformedURLException, NotBoundException {
         if(this.is_binding == true) {
             Naming.unbind(this.url);
-            System.out.println("ngat ket noi");
             this.url = null;
             this.is_binding = false;
+            System.out.println(" da ngat ket noi");
         }
     }
 

@@ -57,6 +57,7 @@ public class CommonController {
     }
     
     public void stopListeningOnServer() throws IOException, NotBoundException {
+    	System.out.println("controler stop");
     	if (this.TCPServer.isListening() && this.RMIServer.isBinding()) {
     		this.TCPServer.stopListeningOnTcpServer();
     		this.RMIServer.stopBindingOnRmiServer();

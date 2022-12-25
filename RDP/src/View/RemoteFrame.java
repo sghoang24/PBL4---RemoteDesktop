@@ -3,15 +3,10 @@ package View;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.GridBagLayout;
-import java.awt.HeadlessException;
-import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.InputEvent;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -22,16 +17,11 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.rmi.RemoteException;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -124,15 +114,17 @@ public class RemoteFrame extends JFrame implements Runnable {
 	public void run(){
 		try{
 			// Read screenshots of the client and then draw them
-			while(true){
+			while(this.comoncontroller.getTcpServer().isHasPartner() || this.comoncontroller.getTcpClient().isConnectedServer()){			
 				byte[] bytes = this.IRemote.TakeScreen(Quality);
 				ByteArrayInputStream input = new ByteArrayInputStream(bytes);
-                BufferedImage image = ImageIO.read(input);
-                //Draw the received screenshots
+	            BufferedImage image = ImageIO.read(input);
+	            //Draw the received screenshots
 				Graphics graphics = Screenpanel.getGraphics();
 				graphics.drawImage(image, 0, 0, Screenpanel.getWidth(), Screenpanel.getHeight(), Screenpanel);
 			}
-		} catch(IOException ex) {
+			this.dispose();
+	
+		}catch(IOException ex) {
 			ex.printStackTrace();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -203,6 +195,12 @@ public class RemoteFrame extends JFrame implements Runnable {
         });
         
         this.add(this.Screenpanel, BorderLayout.CENTER);
+        this.addWindowListener(new WindowAdapter() {
+        	@Override
+        	public void windowClosing(WindowEvent e) {
+        		remoteFrameWindowClosing(e);
+        	}
+		});
 	}
 	
 	private void setupWindow() throws Exception {
@@ -276,4 +274,26 @@ public class RemoteFrame extends JFrame implements Runnable {
     private void screenLabelMouseWheelMoved(MouseWheelEvent e) throws RemoteException {
         this.IRemote.mouseWheelServer(e.getWheelRotation());
     }
+    
+    @Override
+    public void dispose() {
+    	try {
+            super.setVisible(false);
+            super.dispose();
+            this.clientpanel.setEnabled(true);
+            this.comoncontroller.getRmiClient().setRemoteServer(false);
+            this.comoncontroller.getTcpClient().setConnectedServer(false);
+            this.comoncontroller.getTcpClient().getClient().close();
+            if(!this.ScreenThread.isInterrupted())
+                this.ScreenThread.isInterrupted();
+        }
+        catch(Exception exception) {
+            JOptionPane.showMessageDialog(null, "Can't close connection");
+        }
+    }
+    
+    private void remoteFrameWindowClosing(WindowEvent e) {
+        this.dispose();
+    }
+
 }

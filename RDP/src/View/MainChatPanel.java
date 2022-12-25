@@ -31,8 +31,8 @@ public class MainChatPanel extends JPanel {
 		JPanel panel = new JPanel();
 		panel.setBackground(SystemColor.white);
 		panel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, 
-				new Color(255, 255, 255), new Color(160, 160, 160)), "Server Listening", 
-				TitledBorder.LEADING, TitledBorder.TOP, new Font("Times New Roman", Font.BOLD, 14), Color.BLACK));
+		new Color(255, 255, 255), new Color(160, 160, 160)), "Server Listening", 
+		TitledBorder.LEADING, TitledBorder.TOP, new Font("Times New Roman", Font.BOLD, 14), Color.BLACK));
 		panel.setBounds(5, 5, 448, 300);
 		add(panel);
 		JLabel lb = new JLabel("Hello");

@@ -2,9 +2,11 @@ package View;
 
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
+import javax.swing.filechooser.FileSystemView;
 
 import model.common.FileInfo;
 import controller.chat.ChatController;
+import controller.chat.FileMessage;
 import controller.chat.Message;
 import controller.chat.StringMessage;
 import controller.common.CommonController;
@@ -27,7 +29,12 @@ import java.awt.EventQueue;
 import java.awt.SystemColor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class ChatPanel extends JPanel implements Runnable {
     public final static String CONTENT_BACKGROUND = "0xFFFFFF";
@@ -106,7 +113,7 @@ public class ChatPanel extends JPanel implements Runnable {
         
 		
 		lblSend = new JLabel("Send");
-		lblSend.setIcon(new ImageIcon("D:\\DUT - Year 3\\PBL4\\PBL4---RemoteDesktop\\RDP\\Images\\send_icon.png"));
+		lblSend.setIcon(new ImageIcon("Images\\send_icon.png"));
 		lblSend.setFont(new Font("Times New Roman", Font.BOLD, 13));
 		lblSend.setBounds(367, 234, 82, 29);
 		lblSend.addMouseListener(new MouseAdapter() {
@@ -119,12 +126,23 @@ public class ChatPanel extends JPanel implements Runnable {
 		
 		JLabel lblFile = new JLabel("File");
 		lblFile.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		lblFile.setIcon(new ImageIcon("D:\\DUT - Year 3\\PBL4\\PBL4---RemoteDesktop\\RDP\\Images\\file_icon.png"));
+		lblFile.setIcon(new ImageIcon("DImages\\file_icon.png"));
 		lblFile.setBounds(367, 274, 82, 29);
 		lblFile.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				ChooseFile();
+				try {
+					ChooseFile();
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (UnknownHostException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				super.mouseClicked(e);
 			}
 		});
@@ -132,14 +150,28 @@ public class ChatPanel extends JPanel implements Runnable {
 
 	}
 	
-	public void  ChooseFile() {
-		final JFileChooser fc = new JFileChooser();
-		fc.showOpenDialog(this);
-		if (fc.getSelectedFile() != null) {
-			String FilePath = fc.getSelectedFile().getPath();
-			MyFile = new FileInfo(FilePath);
-		}
-		txtMessage.setText(MyFile.getSourceDirectory());
+	public void  ChooseFile() throws UnknownHostException, IOException {
+		JFileChooser file_chooser = new JFileChooser();
+        file_chooser.setCurrentDirectory(FileSystemView.getFileSystemView().getHomeDirectory());
+        file_chooser.showDialog(this, "Send");
+        
+        File dir = file_chooser.getSelectedFile();
+        if(dir != null) {
+        	FileInputStream fis = new FileInputStream(dir);
+        	FileMessage myFileMessage = new FileMessage(InetAddress.getLocalHost().getHostName(), dir.getName(), dir.length(), fis.readAllBytes());
+        	this.chatController.sendMessage(myFileMessage);
+        	
+        	int gap = this.scrollPane.getWidth() - 180;
+        	myFileMessage.setSender("you");
+        	FileLabel file_label = new FileLabel(myFileMessage);
+            this.addMessageToPanel(file_label, gap, "green");
+        }
+        
+//		if (fc.getSelectedFile() != null) {
+//			String FilePath = fc.getSelectedFile().getPath();
+//			MyFile = new FileInfo(FilePath);
+//		}
+//		txtMessage.setText(MyFile.getSourceDirectory());
 	}
 	
 	private void sendLabelMousePressed(MouseEvent e) {
@@ -242,6 +274,11 @@ public class ChatPanel extends JPanel implements Runnable {
                             label.setFont(new Font("consolas", Font.PLAIN, 14));
                             label.setForeground(Color.BLACK);
                             this.addMessageToPanel(label, 0, "blue");
+                        }
+                        else if(obj_message.getCurrentType() == Message.FILE_MESSAGE) {
+                            FileMessage file_message = (FileMessage) obj_message;
+                            FileLabel file_label = new FileLabel(file_message);
+                            this.addMessageToPanel(file_label, 0, "blue");
                         }
 //                        else if(obj_message.getCurrentType() == Message.FILE_MESSAGE) {
 //                            FileMessage file_message = (FileMessage) obj_message;
