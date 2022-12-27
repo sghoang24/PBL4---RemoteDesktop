@@ -126,7 +126,7 @@ public class ChatPanel extends JPanel implements Runnable {
 		
 		JLabel lblFile = new JLabel("File");
 		lblFile.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		lblFile.setIcon(new ImageIcon("DImages\\file_icon.png"));
+		lblFile.setIcon(new ImageIcon("Images\\file_icon.png"));
 		lblFile.setBounds(367, 274, 82, 29);
 		lblFile.addMouseListener(new MouseAdapter() {
 			@Override
